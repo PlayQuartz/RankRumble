@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/RankRumble/build/static/css/main.90ac88af.css",
-    "main.js": "/RankRumble/build/static/js/main.1127d3b6.js",
+    "main.js": "/RankRumble/build/static/js/main.2a02ce0f.js",
     "index.html": "/RankRumble/build/index.html",
     "main.90ac88af.css.map": "/RankRumble/build/static/css/main.90ac88af.css.map",
-    "main.1127d3b6.js.map": "/RankRumble/build/static/js/main.1127d3b6.js.map"
+    "main.2a02ce0f.js.map": "/RankRumble/build/static/js/main.2a02ce0f.js.map"
   },
   "entrypoints": [
     "static/css/main.90ac88af.css",
-    "static/js/main.1127d3b6.js"
+    "static/js/main.2a02ce0f.js"
   ]
 }

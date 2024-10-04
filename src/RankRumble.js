@@ -1,7 +1,7 @@
 import './style.css';
 import Play from './Play'
 import Host from './Host'
-import { HashRouter  as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function RankRumble() {
   return (
