@@ -147,7 +147,7 @@ const ReviewRoom = () => {
 
 const Host = () => {
     const [playerList, setPlayerList] = useState(new Set());
-    const [privateCode, setPrivateCode] = useState(null);
+    const [privateCode, setPrivateCode] = useState(null)
     const [socket, setSocket] = useState(null);
     const [nextState, setNextState] = useState(0);
     const [currentState, setCurrentState] = useState();
@@ -156,11 +156,9 @@ const Host = () => {
     const token = get_cookie('auth_token')
     const userID = get_cookie('user_id');
     const navigate = useNavigate()
-    setPrivateCode((Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString())
 
     useEffect(() => {
         const checkUserConnection = async () => {
-            console.log(token)
             fetch('https://api.playquartz.com/request/token/', {
                 method: 'POST',
                 headers: {
@@ -172,6 +170,9 @@ const Host = () => {
             .then(data => {
                 if(!data.valid || data.expired){
                     navigate('/')
+                }
+                else{
+                    setPrivateCode((Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString())
                 }
             })
             .catch(error => {
