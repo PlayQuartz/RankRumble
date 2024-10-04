@@ -7,7 +7,7 @@
     "main.04ee3b6e.js.map": "/RankRumble/build/static/js/main.04ee3b6e.js.map"
   },
   "entrypoints": [
-    "static/css/main.90ac88af.css",
-    "static/js/main.04ee3b6e.js"
+    "/RankRumble/build/static/css/main.90ac88af.css",
+    "/RankRumble/build/static/js/main.04ee3b6e.js"
   ]
 }
