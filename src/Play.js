@@ -1,6 +1,6 @@
 import './style.css'
 import React, { useState, useEffect, createContext, useContext } from 'react'
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const PlayContext = createContext()
@@ -106,7 +106,7 @@ const Play = () => {
     const [privateCode, setPrivateCode] = useState(null)
     const [socket, setSocket] = useState(null);
     const [currentRoom, setCurrentRoom] = useState(<AccessRoom />)
-    const {userID} = useParams()
+    const {userID} = new URLSearchParams(useLocation().search).get('userID');
 
     useEffect(() => {
 

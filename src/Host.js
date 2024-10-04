@@ -1,6 +1,6 @@
 import './style.css'
 import React, { useState, useEffect, useRef, createContext, useContext } from 'react'
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const HostContext = createContext();
@@ -145,12 +145,12 @@ const Host = () => {
     const [nextState, setNextState] = useState(0);
     const [currentState, setCurrentState] = useState();
     const [playerAnswers, setPlayerAnswers] = useState([])
-    const {uuid} = useParams()
+    const {uuid} = new URLSearchParams(useLocation().search).get('uuid');
 
     useEffect(() => {
         setCurrentState(<LobbyRoom />);
         const socket_io = io(SOCKET_SERVER_URL);
-        console.log(uuid)
+
         socket_io.emit('host_game', {code: privateCode, user_id: '3789fhds9j', quizz_uuid: uuid});
 
         socket_io.on('user_join', (socket_data) => {
