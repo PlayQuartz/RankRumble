@@ -1,11 +1,19 @@
 import './style.css'
 import React, { useState, useEffect, createContext, useContext } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const PlayContext = createContext()
 
 const SOCKET_SERVER_URL = 'http://localhost:3001';
+
+const get_cookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  };
+  
 
 const AccessRoom = ({ setPrivateCode }) => {
 
@@ -63,7 +71,7 @@ const LeaderboardRoom = ({leaderboard}) => {
 
 const QuestionRoom = ({ question, answers}) => {
 
-    const {privateCode, socket, setCurrentRoom, userID} = useContext(PlayContext)
+    const {privateCode, socket, userID} = useContext(PlayContext)
 
     const submit_answers = () => {
         let records = document.querySelectorAll('.record')
@@ -106,12 +114,39 @@ const Play = () => {
     const [privateCode, setPrivateCode] = useState(null)
     const [socket, setSocket] = useState(null);
     const [currentRoom, setCurrentRoom] = useState(<AccessRoom />)
-    const {userID} = new URLSearchParams(useLocation().search).get('userID');
+    const token = get_cookie('auth_token')
+    const userID = get_cookie('user_id');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkUserConnection = async () => {
+
+            fetch('https://api.playquartz.com/request/token/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({token})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(!data.valid || data.expired){
+                    navigate('/')
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                navigate('/')
+            })
+        }
+        checkUserConnection();
+    }, [token, navigate]);
+
 
     useEffect(() => {
 
         const socket_io = io(SOCKET_SERVER_URL);
-        console.log('test', privateCode)
+
         socket_io.emit('join_game', {private_code: privateCode, user_id: userID})
 
         socket_io.on('room_state', (data) => {
@@ -134,7 +169,7 @@ const Play = () => {
         return () => {
             socket_io.disconnect();
         };
-    }, [privateCode]);
+    }, [privateCode, userID]);
 
     return (
 

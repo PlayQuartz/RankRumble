@@ -1,11 +1,18 @@
 import './style.css'
 import React, { useState, useEffect, useRef, createContext, useContext } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const HostContext = createContext();
 
 const SOCKET_SERVER_URL = 'http://localhost:3001';
+
+const get_cookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  };
 
 const CheckBox = ({ className}) => {
 
@@ -140,18 +147,47 @@ const ReviewRoom = () => {
 
 const Host = () => {
     const [playerList, setPlayerList] = useState(new Set());
-    const [privateCode, setPrivateCode] = useState((Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString());
+    const [privateCode, setPrivateCode] = useState(null);
     const [socket, setSocket] = useState(null);
     const [nextState, setNextState] = useState(0);
     const [currentState, setCurrentState] = useState();
     const [playerAnswers, setPlayerAnswers] = useState([])
-    const {uuid} = new URLSearchParams(useLocation().search).get('uuid');
+    const uuid = new URLSearchParams(useLocation().search).get('uuid');
+    const token = get_cookie('auth_token')
+    const userID = get_cookie('user_id');
+    const navigate = useNavigate()
+    setPrivateCode((Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString())
+
+    useEffect(() => {
+        const checkUserConnection = async () => {
+            console.log(token)
+            fetch('https://api.playquartz.com/request/token/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({token})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(!data.valid || data.expired){
+                    navigate('/')
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                navigate('/')
+            })
+        }
+        checkUserConnection();
+    }, [token, navigate]);
+
 
     useEffect(() => {
         setCurrentState(<LobbyRoom />);
         const socket_io = io(SOCKET_SERVER_URL);
 
-        socket_io.emit('host_game', {code: privateCode, user_id: '3789fhds9j', quizz_uuid: uuid});
+        socket_io.emit('host_game', {code: privateCode, user_id: userID, quizz_uuid: uuid});
 
         socket_io.on('user_join', (socket_data) => {
 
@@ -185,7 +221,7 @@ const Host = () => {
         return () => {
             socket_io.disconnect();
         };
-    }, [privateCode, uuid]);
+    }, [privateCode, uuid, userID]);
 
     return (
         <HostContext.Provider value={{ playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
