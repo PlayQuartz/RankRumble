@@ -18,8 +18,8 @@ const HostDashboard = () => {
     return (
         <div className='hostdashboard'>
             <div className='header'>
-                <div className='title'>Host Dashboard</div>
-                <div className='subtitle'>Select a quiz to lead the game and guide your players on an exciting challenge!</div>
+                <div onClick={() => navigate('/dashboard')} className='logo'>Rank Rumble</div>
+                <div className='logout'>Log Out</div>
             </div>
             <div className='container'>
                 {
