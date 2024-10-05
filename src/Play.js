@@ -21,9 +21,13 @@ const AccessRoom = ({ setPrivateCode }) => {
 
     return (
         <div className='access_room'>
-            <div className='code_container'>
-                <input type='number' id='private_code' onChange={(e) => setUserInput(e.target.value)} placeholder='Private Code' />
-                <button id='submit_private_code' onClick={() => setPrivateCode(userInput)} >Validate</button>
+            <div className='border_container'>
+                <div className='code_container'>
+                    <div className='border_input'>
+                        <input type='number' id='private_code' onChange={(e) => setUserInput(e.target.value)} placeholder='Private Code' />
+                    </div>                  
+                    <button id='submit_private_code' onClick={() => setPrivateCode(userInput)} >Validate</button>
+                </div>
             </div>
         </div>
     )

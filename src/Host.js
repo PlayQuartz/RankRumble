@@ -78,7 +78,7 @@ const LeaderboardRoom = ({leaderboard}) => {
 
 const ReviewRoom = () => {
 
-    const { privateCode, socket, setCurrentState, nextState, playerAnswers } = useContext(HostContext);
+    const { privateCode, currentQuestion,  socket, setCurrentState, nextState, playerAnswers } = useContext(HostContext);
 
     const UserAnswer = ({ data }) => {
 
@@ -134,7 +134,7 @@ const ReviewRoom = () => {
         <div className='review_room'>
             <button onClick={next_question} className='next_button'>{nextState === -1 ? 'See Leaderboard' : 'Next Question'}</button>
             <div className='question_container'>
-                <div className='question'>This is a test question?</div>
+                <div className='question'>{currentQuestion && currentQuestion}</div>
             </div>
             <div className='answer_container'>
                 {
@@ -148,9 +148,10 @@ const ReviewRoom = () => {
 const Host = () => {
     const [playerList, setPlayerList] = useState(new Set());
     const [privateCode, setPrivateCode] = useState(null)
+    const [currentQuestion, setCurrentQuestion] = useState(null)
     const [socket, setSocket] = useState(null);
     const [nextState, setNextState] = useState(0);
-    const [currentState, setCurrentState] = useState();
+    const [currentState, setCurrentState] = useState(<LobbyRoom />);
     const [playerAnswers, setPlayerAnswers] = useState([])
     const uuid = new URLSearchParams(useLocation().search).get('uuid');
     const token = get_cookie('auth_token')
@@ -158,34 +159,33 @@ const Host = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const checkUserConnection = async () => {
-            fetch('https://api.playquartz.com/request/token/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({token})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(!data.valid || data.expired){
-                    navigate('/')
-                }
-                else{
-                    setPrivateCode((Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString())
-                }
-            })
-            .catch(error => {
-                console.log(error)
+
+        fetch('https://api.playquartz.com/request/token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({token})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(!data.valid || data.expired){
                 navigate('/')
-            })
-        }
-        checkUserConnection();
+            }
+            else{
+                setPrivateCode((Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString())
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            navigate('/')
+        })
+
     }, [token, navigate]);
 
 
     useEffect(() => {
-        setCurrentState(<LobbyRoom />);
+
         const socket_io = io(SOCKET_SERVER_URL);
 
         socket_io.emit('host_game', {code: privateCode, user_id: userID, quizz_uuid: uuid});
@@ -193,7 +193,6 @@ const Host = () => {
         socket_io.on('user_join', (socket_data) => {
 
             const {user_id} = socket_data
-
             setPlayerList(pastSet => {
                 const newSet = new Set(pastSet);
                 newSet.add(user_id);
@@ -202,10 +201,11 @@ const Host = () => {
         });
 
         socket_io.on('room_state', (socket_data) => {
-
             if(socket_data.state === 3){
-
                 setCurrentState(<LeaderboardRoom  leaderboard={socket_data.leaderboard}/>)
+            }
+            else if(socket_data.state === 2){
+                setCurrentQuestion(socket_data.question)
             }
         })
 
@@ -225,7 +225,7 @@ const Host = () => {
     }, [privateCode, uuid, userID]);
 
     return (
-        <HostContext.Provider value={{ playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
+        <HostContext.Provider value={{ currentQuestion, playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
             <div className="host_container">
                 {currentState}
             </div>
