@@ -63,15 +63,11 @@ const EditQuizz = ({ quizz_id }) => {
                 .then(response => response.json())
                 .then(data => {
                     let question_data = []
-                    if (data.quizz_questions[0]) {
+                    if (data.quizz_questions) {
                         Object.keys(data.quizz_questions).forEach(question_id => {
                             console.log(question_id)
                             question_data.push({ question: data.quizz_questions[question_id], answers: data.quizz_answers[question_id] })
                         })
-                        setCurrentQuestion(0)
-                    }
-                    else {
-                        setCurrentQuestion(null)
                     }
 
                     setQuestions(question_data)
