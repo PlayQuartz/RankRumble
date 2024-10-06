@@ -33,8 +33,8 @@ const HostDashboard = () => {
             </div>
             <div className='container'>
                 {
-                    quizz && quizz.map(card => (
-                        <div onClick={() => {
+                    quizz && quizz.map((card, index) => (
+                        <div key={index} onClick={() => {
                             if(card.created_by === user_id){
                                 navigate('/host?uuid=' + card.quizz_id)
                             }

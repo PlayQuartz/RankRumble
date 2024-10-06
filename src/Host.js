@@ -17,34 +17,67 @@ const get_cookie = (name) => {
 const CheckBox = ({ className}) => {
 
     const [state, setState] = useState(false)
+    
 
     return (
-        <svg onClick={() => setState(!state)} state={state} className={className} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0" y="0" width="100" height="100" rx="20" ry="20" fill="inherit" strokeWidth="4" />
-            {state ? <polyline points="30,50 45,65 70,35" fill="none" stroke="white" strokeWidth="6"/> : ''}
+        <svg onClick={() => setState(!state)} state={state} className={className} viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gradientBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: "#1e90ff", stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: "#6a0dad", stopOpacity: 1 }} />
+            </linearGradient>
+          </defs>
+    
+          <rect x="2" y="2" width="116" height="116" rx="20" ry="20" fill="none" stroke="url(#gradientBorder)" strokeWidth="4" />
+          <rect x="8" y="8" width="104" height="104" rx="16" ry="16" fill="black" />
+          
+          {state ? <polyline points="35,55 50,70 75,40" fill="none" stroke="white" strokeWidth="8" /> : null}
         </svg>
-    )
+      );
 }
 
 const LobbyRoom = () => {
 
     const { privateCode, playerList, socket, setCurrentState} = useContext(HostContext);
+    const [copyState, setCopyState] = useState(false)
 
     const start_quizz = () => {
         socket.emit('quizz_state', {state: 'question', current_question: 1, private_code: privateCode})
         setCurrentState(<ReviewRoom/>)
     }
 
+    const copy_code = () => {
+        navigator.clipboard.writeText(privateCode)
+        setCopyState(true)
+
+
+        setInterval(() => {
+            setCopyState(false)
+        }, 2000)
+
+    }
+
     return (
         <div className='lobby_room'>
             <button onClick={start_quizz} className='start_button'>Start</button>
-            <div className='invite_code'>{privateCode}
-                <div className='user_connected'>
-                    {
-                        Array.from(playerList).map((user, index) => (<div className='user' key={index}>{user}</div>))
-                    }
+            <div onClick={copy_code} className='border'>
+                <div className='background'>
+                    <div className='invite_code'>{privateCode}
+                        <div style={{display: copyState ? 'block' : 'none'}} className='copied'>Code Copied</div>
+                        <div className='user_connected'>
+                            {
+                                Array.from(playerList).map((user, index) => (
+                                    <div className='border'>
+                                        <div className='user' key={index}>{user}</div>
+                                    </div>
+                                
+                            ))
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     )
 }
@@ -119,8 +152,8 @@ const ReviewRoom = () => {
                 {
                     data.answers.map((record, index) => (
                         <div className='row'>
-                            <div className='rank'>{index + 1}</div>
-                            <div className='record'>{record}</div>
+                            <div className='border'><div className='rank'>{index + 1}</div></div>
+                            <div className='border'><div className='record'>{record}</div></div>
                             <CheckBox className='correct' />
                             <CheckBox className='position' />
                         </div>

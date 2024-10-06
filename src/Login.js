@@ -13,6 +13,8 @@ const Login = () => {
 
     const [password, setPassword] = useState(null)
     const [email, setEmail] = useState(null)
+    const [invalidPassword, setInvalidPassword] = useState(false)
+    const [invalidEmail, setInvalidEmail] = useState(false)
     const token = get_cookie('auth_token')
     const navigate = useNavigate()
 
@@ -39,6 +41,9 @@ const Login = () => {
 
     const submit_login = () => {
 
+        setInvalidEmail(false)
+        setInvalidPassword(false)
+        
         fetch('https://api.playquartz.com/request/login/', {
             method: 'POST', 
             headers: {
@@ -48,7 +53,16 @@ const Login = () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+
+            if(data.message){
+                if(data.message === 'invalid_email'){
+                    setInvalidEmail(true)
+                }
+                else if(data.message === 'invalid_password'){
+                    setInvalidPassword(true)
+                }
+            }
+
             document.cookie = `auth_token=${data.token}; path=/;`
             document.cookie = `user_id=${data.user_id}; path=/;`
             if(data.token){
@@ -62,8 +76,12 @@ const Login = () => {
         <div className='login'>
             <div className='container'>
                 <div className='title'>Login</div>
-                <input onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
-                <div>
+                <div style={{display: invalidEmail ? 'block' : 'none'}} className='invalid_email'>* Invalid Email</div>
+                <div className='border'>
+                    <input onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
+                </div>
+                <div style={{display: invalidPassword ? 'block' : 'none'}} className='invalid_email'>* Invalid Password</div>
+                <div className='border'>
                     <input onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Password'/>
                 </div>
                 <button onClick={submit_login} className='validate_login'>Validate</button>
