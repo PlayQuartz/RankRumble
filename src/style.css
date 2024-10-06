@@ -92,26 +92,58 @@ body {
 .waiting_room .title {
   font-size: 50px;
   font-weight: 600;
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  -webkit-background-clip: text;
+  /* Clip the background to the text */
+  color: transparent;
+  /* Make the text itself transparent */
 }
-
 .quizz_room {
   height: 100%;
   width: 100%;
 }
-.quizz_room .question_container {
-  height: 20%;
+.quizz_room .header {
+  height: 7%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #434343;
+  background-color: #080808;
   box-sizing: border-box;
-  overflow: hidden;
+  padding: 0 50px;
+  border-bottom: 2px solid;
+  /* Set the border width */
+  border-image: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%) 1;
+  color: white;
 }
-.quizz_room .question_container .question {
-  line-height: 1;
-  text-align: center;
-  font-size: clamp(1px, 2vw, 250%);
-  line-height: 1;
+.quizz_room .header .logo {
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  -webkit-background-clip: text;
+  /* Clip the background to the text */
+  color: transparent;
+  /* Make the text itself transparent */
+}
+.quizz_room .header .logo:hover {
+  font-size: 21px;
+  transition: all 0.2s;
+}
+.quizz_room .header .logout {
+  font-size: 15px;
+  font-weight: 100;
+  margin-left: auto;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.quizz_room .header .logout:hover {
+  font-weight: 400;
+  opacity: 0.8;
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  -webkit-background-clip: text;
+  /* Clip the background to the text */
+  color: transparent;
+  /* Make the text itself transparent */
+  transition: all 0.2s;
 }
 .quizz_room .answer_container {
   height: 80%;
@@ -122,6 +154,13 @@ body {
   align-items: center;
   gap: 10px;
 }
+.quizz_room .answer_container .question {
+  line-height: 1;
+  text-align: center;
+  font-size: clamp(1px, 2vw, 250%);
+  line-height: 1;
+  padding-bottom: 50px;
+}
 .quizz_room .answer_container .row {
   display: grid;
   width: 300px;
@@ -130,23 +169,37 @@ body {
   column-gap: 10px;
   text-align: center;
 }
-.quizz_room .answer_container .row .rank {
+.quizz_room .answer_container .row .border {
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 1px;
+}
+.quizz_room .answer_container .row .border .black_background {
+  background-color: #000;
+  border-radius: 5px;
+  height: 100%;
+}
+.quizz_room .answer_container .row .border .black_background .rank {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #2E2E2E;
+  background-color: #000;
+  height: 100%;
   border-radius: 5px;
 }
 .quizz_room .answer_container .row .record {
-  background-color: #2E2E2E;
+  background-color: #000;
   border: none;
   outline: none;
   border-radius: 5px;
   color: white;
   text-align: center;
+  height: 100%;
+  width: 100%;
 }
 .quizz_room .answer_container .submit_answer {
-  background-color: #313131;
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
   width: fit-content;
   border: none;
   border-radius: 10px;
@@ -154,6 +207,11 @@ body {
   padding: 10px 20px;
   margin-top: 20px;
   cursor: pointer;
+  opacity: 0.8;
+}
+.quizz_room .answer_container .submit_answer:hover {
+  background: linear-gradient(149deg, #6a0dad 0%, #1e90ff 96.86%);
+  opacity: 1;
 }
 
 .lobby_room {
@@ -216,6 +274,53 @@ body {
 .leaderboard_room {
   height: 100%;
   width: 100%;
+  background-color: #000;
+}
+.leaderboard_room .header {
+  height: 7%;
+  display: flex;
+  align-items: center;
+  background-color: #080808;
+  box-sizing: border-box;
+  padding: 0 50px;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%) 1;
+  color: white;
+}
+.leaderboard_room .header .logo {
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  -webkit-background-clip: text;
+  /* Clip the background to the text */
+  color: transparent;
+  /* Make the text itself transparent */
+}
+.leaderboard_room .header .logo:hover {
+  font-size: 21px;
+  transition: all 0.2s;
+}
+.leaderboard_room .header .logout {
+  font-size: 15px;
+  font-weight: 100;
+  margin-left: auto;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.leaderboard_room .header .logout:hover {
+  font-weight: 400;
+  opacity: 0.8;
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  -webkit-background-clip: text;
+  /* Clip the background to the text */
+  color: transparent;
+  /* Make the text itself transparent */
+  transition: all 0.2s;
+}
+.leaderboard_room .table_container {
+  height: 93%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -233,22 +338,39 @@ body {
   height: 35px;
   text-align: center;
 }
+.leaderboard_room .table .row .key {
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  height: 30px;
+}
+.leaderboard_room .table .row .border {
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  padding: 1px;
+  border-radius: 5px;
+}
 .leaderboard_room .table .row .rank,
 .leaderboard_room .table .row .points,
 .leaderboard_room .table .row .timestamp {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #2E2E2E;
+  background-color: #000;
   border-radius: 5px;
+  height: 100%;
+  width: 100%;
 }
 .leaderboard_room .table .row .username {
-  background-color: #2E2E2E;
+  background-color: #000;
   border-radius: 5px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
   padding: 0 10px;
+  height: 100%;
+  width: 100%;
 }
 
 .review_room {
@@ -679,11 +801,17 @@ body {
   width: 50px;
   cursor: pointer;
 }
+.create .border {
+  background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+  width: 50%;
+  padding: 1px;
+  border-radius: 25px;
+}
 .create .create_dashboard {
   position: relative;
   box-sizing: border-box;
-  padding: 25px;
-  width: 40%;
+  padding: 50px 25px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 25px;

@@ -5,15 +5,15 @@ import { io } from 'socket.io-client';
 
 const PlayContext = createContext()
 
-const SOCKET_SERVER_URL = 'http://localhost:3001';
+const SOCKET_SERVER_URL = 'https://socket.playquartz.com?webapp=rankrumble';
 
 const get_cookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
-  };
-  
+};
+
 
 const AccessRoom = ({ setPrivateCode }) => {
 
@@ -25,7 +25,7 @@ const AccessRoom = ({ setPrivateCode }) => {
                 <div className='code_container'>
                     <div className='border_input'>
                         <input type='number' id='private_code' onChange={(e) => setUserInput(e.target.value)} placeholder='Private Code' />
-                    </div>                  
+                    </div>
                     <button id='submit_private_code' onClick={() => setPrivateCode(userInput)} >Validate</button>
                 </div>
             </div>
@@ -41,41 +41,52 @@ const WaitingRoom = ({ state }) => {
     return (
         <div className='waiting_room'>
             <div className='title'>{titles[state]}</div>
-            <div>{subtitles[state]}</div>
+            <div className='subtitle'>{subtitles[state]}</div>
         </div>
     )
 }
 
-const LeaderboardRoom = ({leaderboard}) => {
+const LeaderboardRoom = ({ leaderboard }) => {
+
+    const {navigate} = useContext(PlayContext)
 
     return (
         <div className='leaderboard_room'>
-            <div className='table'>
-                <div className='row'>
-                    <div>Rank</div>
-                    <div>Player</div>
-                    <div>Points</div>
-                    <div>Timestamp</div>
-                </div>
-                {
-                    leaderboard && leaderboard.map((row, index) => (
-                        <div className='row' key={index}>
-                            <div className='rank'>{index+1}</div>
-                            <div className='username'>{row[0]}</div>
-                            <div className='points'>{row[1]}</div>
-                            <div className='timestamp'>{row[2]/1000}s</div>
-                        </div>
-                    ))
-                }
 
+            <div className='header'>
+                <div onClick={() => navigate('/dashboard')} className='logo'>Rank Rumble</div>
+                <div className='logout'>Log Out</div>
+            </div>
+
+            <div className='table_container'>
+                <div className='table'>
+                    <div className='row'>
+                        <div className='key'>Rank</div>
+                        <div className='key'>Player</div>
+                        <div className='key'>Points</div>
+                        <div className='key'>Time</div>
+                    </div>
+
+                    {
+                        leaderboard && leaderboard.map((row, index) => (
+                            <div className='row' key={index}>
+                                <div className='border'><div className='rank'>{index + 1}</div></div>
+                                <div className='border'><div className='username'>{row[0]}</div></div>
+                                <div className='border'><div className='points'>{row[1]}</div></div>
+                                <div className='border'><div className='timestamp'>{row[2] / 1000}s</div></div>
+                            </div>
+                        ))
+                    }
+
+                </div>
             </div>
         </div>
     )
 }
 
-const QuestionRoom = ({ question, answers}) => {
+const QuestionRoom = ({ question, answers }) => {
 
-    const {privateCode, socket, userID} = useContext(PlayContext)
+    const { privateCode, socket, userID, navigate } = useContext(PlayContext)
 
     const submit_answers = () => {
         let records = document.querySelectorAll('.record')
@@ -83,15 +94,19 @@ const QuestionRoom = ({ question, answers}) => {
         records.forEach((record, index) =>
             answers.push(record.value)
         )
-        socket.emit('submit_answers', {answers, private_code: privateCode, user_id: userID})
+        socket.emit('submit_answers', { answers, private_code: privateCode, user_id: userID })
     }
 
     return (
         <div className='quizz_room'>
-            <div className='question_container'>
-                <div className='question'>{question}</div>
+
+            <div className='header'>
+                <div onClick={() => navigate('/dashboard')} className='logo'>Rank Rumble</div>
+                <div className='logout'>Log Out</div>
             </div>
+
             <div className='answer_container'>
+                <div className='question'>{question}</div>
                 <div className='row'>
                     <div>Rank</div>
                     <div>Record</div>
@@ -101,8 +116,15 @@ const QuestionRoom = ({ question, answers}) => {
                     Array.from({ length: answers }).map((_, index) => (
 
                         <div className='row' key={index}>
-                            <div className='rank'>{index + 1}</div>
-                            <input className='record' placeholder={'Record ' + (index + 1)} />
+                            <div className='border'>
+                                <div className='black_background'>
+                                    <div className='rank'>{index + 1}</div>
+                                </div>
+                            </div>
+                            <div className='border'>
+                                <input className='record' placeholder={'Record ' + (index + 1)} />
+                            </div>
+
                         </div>
 
                     ))
@@ -130,18 +152,18 @@ const Play = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({token})
+                body: JSON.stringify({ token })
             })
-            .then(response => response.json())
-            .then(data => {
-                if(!data.valid || data.expired){
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.valid || data.expired) {
+                        navigate('/')
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
                     navigate('/')
-                }
-            })
-            .catch(error => {
-                console.log(error)
-                navigate('/')
-            })
+                })
         }
         checkUserConnection();
     }, [token, navigate]);
@@ -151,19 +173,19 @@ const Play = () => {
 
         const socket_io = io(SOCKET_SERVER_URL);
 
-        socket_io.emit('join_game', {private_code: privateCode, user_id: userID})
+        socket_io.emit('join_game', { private_code: privateCode, user_id: userID })
 
         socket_io.on('room_state', (data) => {
-            if(data.state === 0){
-                setCurrentRoom(<AccessRoom setPrivateCode={setPrivateCode}/>)             
+            if (data.state === 0) {
+                setCurrentRoom(<AccessRoom setPrivateCode={setPrivateCode} />)
             }
-            else if(data.state === 1){
-                setCurrentRoom(<WaitingRoom state={data.waiting_state}/>)
+            else if (data.state === 1) {
+                setCurrentRoom(<WaitingRoom state={data.waiting_state} />)
             }
-            else if(data.state === 2){
-                setCurrentRoom(<QuestionRoom question={data.question} answers={data.answers}/>)
+            else if (data.state === 2) {
+                setCurrentRoom(<QuestionRoom question={data.question} answers={data.answers} />)
             }
-            else if(data.state === 3){
+            else if (data.state === 3) {
                 setCurrentRoom(<LeaderboardRoom leaderboard={data.leaderboard} />)
             }
         })
@@ -177,7 +199,7 @@ const Play = () => {
 
     return (
 
-        <PlayContext.Provider value={{privateCode, socket, setCurrentRoom, userID}}>
+        <PlayContext.Provider value={{ privateCode, socket, setCurrentRoom, userID, navigate }}>
             <div className='play_container'>
                 {currentRoom}
             </div>

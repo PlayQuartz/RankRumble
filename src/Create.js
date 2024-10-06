@@ -16,6 +16,7 @@ const CreateDashboard = () => {
     const { userQuizz, setDisplay, navigate } = useContext(CreateContext)
 
     return (
+        
         <div className='create_dashboard'>
             <div className='header'>
                 <div onClick={() => navigate('/dashboard')} className='logo'>Rank Rumble</div>
@@ -189,6 +190,7 @@ const EditQuizz = ({ quizz_id }) => {
                     <line x1="18" y1="2" x2="2" y2="18" stroke="url(#gradient1)" strokeWidth="2" />
                 </svg>
             </div>
+            <div className='border'>
             <div className='create_dashboard'>
                 <div className='titles'>
                     <input value={title} onChange={(e) => setTitle(e.target.value)} className='title' placeholder='Title' />
@@ -323,6 +325,8 @@ const EditQuizz = ({ quizz_id }) => {
                             </div>
                     </div>
             </div>
+            </div>
+
         </div>
     )
 
@@ -338,6 +342,26 @@ const Create = () => {
     const user_id = get_cookie('user_id')
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        fetch('https://api.playquartz.com/request/token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({token})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(!data.valid || data.expired){
+                navigate('/')
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            navigate('/')
+        })
+    }, [token, navigate]);
 
     useEffect(() => {
         fetch('https://api.playquartz.com/request/get_quizz/all')

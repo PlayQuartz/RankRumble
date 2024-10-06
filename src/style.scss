@@ -105,6 +105,15 @@ body {
     .title {
         font-size: 50px;
         font-weight: 600;
+        background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+        -webkit-background-clip: text;
+        /* Clip the background to the text */
+        color: transparent;
+        /* Make the text itself transparent */
+    }
+
+    .subtitle{
+        
     }
 }
 
@@ -112,20 +121,52 @@ body {
     height: 100%;
     width: 100%;
 
-    .question_container {
-        height: 20%;
+    .header {
+        height: 7%;
         display: flex;
-        justify-content: center;
         align-items: center;
-        border-bottom: 1px solid #434343;
+        background-color: #080808;
         box-sizing: border-box;
-        overflow: hidden;
+        padding: 0 50px;
+        border-bottom: 2px solid;
+        /* Set the border width */
+        border-image: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%) 1;
+        color: white;
 
-        .question {
-            line-height: 1;
-            text-align: center;
-            font-size: clamp(1px, 2vw, 250%);
-            line-height: 1;
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+            -webkit-background-clip: text;
+            /* Clip the background to the text */
+            color: transparent;
+            /* Make the text itself transparent */
+
+            &:hover {
+                font-size: 21px;
+                transition: all 0.2s;
+
+            }
+        }
+
+        .logout {
+            font-size: 15px;
+            font-weight: 100;
+            margin-left: auto;
+            opacity: 0.5;
+            cursor: pointer;
+
+            &:hover {
+                font-weight: 400;
+                opacity: 0.8;
+                background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+                -webkit-background-clip: text;
+                /* Clip the background to the text */
+                color: transparent;
+                /* Make the text itself transparent */
+                transition: all 0.2s;
+            }
         }
     }
 
@@ -138,6 +179,15 @@ body {
         align-items: center;
         gap: 10px;
 
+        .question {
+            line-height: 1;
+            text-align: center;
+            font-size: clamp(1px, 2vw, 250%);
+            line-height: 1;
+            padding-bottom: 50px;
+        }
+
+
         .row {
             display: grid;
             width: 300px;
@@ -146,26 +196,44 @@ body {
             column-gap: 10px;
             text-align: center;
 
-            .rank {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: #2E2E2E;
+            .border {
+                background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+                box-sizing: border-box;
                 border-radius: 5px;
+                padding: 1px;
+
+                .black_background {
+                    background-color: #000;
+                    border-radius: 5px;
+                    height: 100%;
+
+                    .rank {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: #000;
+                        height: 100%;
+                        border-radius: 5px;
+                    }
+                }
+
+                
             }
 
             .record {
-                background-color: #2E2E2E;
+                background-color: #000;
                 border: none;
                 outline: none;
                 border-radius: 5px;
                 color: white;
                 text-align: center;
+                height: 100%;
+                width: 100%;
             }
         }
 
         .submit_answer {
-            background-color: #313131;
+            background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
             width: fit-content;
             border: none;
             border-radius: 10px;
@@ -173,6 +241,12 @@ body {
             padding: 10px 20px;
             margin-top: 20px;
             cursor: pointer;
+            opacity: 0.8;
+
+            &:hover{
+                background: linear-gradient(149deg, #6a0dad 0%, #1e90ff 96.86%);
+                opacity: 1;
+            }
         }
 
 
@@ -246,9 +320,63 @@ body {
 .leaderboard_room {
     height: 100%;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #000;
+
+    .header {
+        height: 7%;
+        display: flex;
+        align-items: center;
+        background-color: #080808;
+        box-sizing: border-box;
+        padding: 0 50px;
+        border-bottom: 2px solid;
+        border-image: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%) 1;
+        color: white;
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+            -webkit-background-clip: text;
+            /* Clip the background to the text */
+            color: transparent;
+            /* Make the text itself transparent */
+
+            &:hover {
+                font-size: 21px;
+                transition: all 0.2s;
+
+            }
+        }
+
+        .logout {
+            font-size: 15px;
+            font-weight: 100;
+            margin-left: auto;
+            opacity: 0.5;
+            cursor: pointer;
+
+            &:hover {
+                font-weight: 400;
+                opacity: 0.8;
+                background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+                -webkit-background-clip: text;
+                /* Clip the background to the text */
+                color: transparent;
+                /* Make the text itself transparent */
+                transition: all 0.2s;
+            }
+        }
+    }
+
+    .table_container{
+        height: 93%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
     .table {
         display: flex;
@@ -263,23 +391,42 @@ body {
             height: 35px;
             text-align: center;
 
+            .key{
+                background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                height: 30px;
+            }
+
+            .border{
+                background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+                padding: 1px;
+                border-radius: 5px;
+            }
+
             .rank,
             .points,
             .timestamp {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background-color: #2E2E2E;
+                background-color: #000;
                 border-radius: 5px;
+                height: 100%;
+                width: 100%;
             }
 
             .username {
-                background-color: #2E2E2E;
+                background-color: #000;
                 border-radius: 5px;
                 display: flex;
                 align-items: center;
                 box-sizing: border-box;
                 padding: 0 10px;
+                height: 100%;
+                width: 100%;
             }
 
         }
@@ -776,11 +923,19 @@ body {
         cursor: pointer;
     }
 
+    
+    .border{
+        background: linear-gradient(149deg, #1e90ff 0%, #6a0dad 96.86%);
+        width: 50%;
+        padding: 1px;
+        border-radius: 25px;
+    }
+
     .create_dashboard {
         position: relative;
         box-sizing: border-box;
-        padding: 25px;
-        width: 40%;
+        padding: 50px 25px;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 25px;

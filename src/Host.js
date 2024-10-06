@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 
 const HostContext = createContext();
 
-const SOCKET_SERVER_URL = 'http://localhost:3001';
+const SOCKET_SERVER_URL = 'https://socket.playquartz.com?webapp=rankrumble';
 
 const get_cookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -49,28 +49,39 @@ const LobbyRoom = () => {
     )
 }
 
-const LeaderboardRoom = ({leaderboard}) => {
+const LeaderboardRoom = ({ leaderboard }) => {
+
+    const {navigate} = useContext(HostContext)
 
     return (
         <div className='leaderboard_room'>
-            <div className='table'>
-                <div className='row'>
-                    <div>Rank</div>
-                    <div>Player</div>
-                    <div>Points</div>
-                    <div>Timestamp</div>
-                </div>
-                {
-                    leaderboard && leaderboard.map((row, index) => (
-                        <div className='row' key={index}>
-                            <div className='rank'>{index+1}</div>
-                            <div className='username'>{row[0]}</div>
-                            <div className='points'>{row[1]}</div>
-                            <div className='timestamp'>{row[2]/1000}s</div>
-                        </div>
-                    ))
-                }
 
+            <div className='header'>
+                <div onClick={() => navigate('/dashboard')} className='logo'>Rank Rumble</div>
+                <div className='logout'>Log Out</div>
+            </div>
+
+            <div className='table_container'>
+                <div className='table'>
+                    <div className='row'>
+                        <div className='key'>Rank</div>
+                        <div className='key'>Player</div>
+                        <div className='key'>Points</div>
+                        <div className='key'>Time</div>
+                    </div>
+
+                    {
+                        leaderboard && leaderboard.map((row, index) => (
+                            <div className='row' key={index}>
+                                <div className='border'><div className='rank'>{index + 1}</div></div>
+                                <div className='border'><div className='username'>{row[0]}</div></div>
+                                <div className='border'><div className='points'>{row[1]}</div></div>
+                                <div className='border'><div className='timestamp'>{row[2] / 1000}s</div></div>
+                            </div>
+                        ))
+                    }
+
+                </div>
             </div>
         </div>
     )
@@ -103,7 +114,7 @@ const ReviewRoom = () => {
 
         return (
             <div className='user_answer' ref={user_answer}>
-                <div className='username'>{data.user_id}</div>
+                <div className='username'>{data.username ? data.username : data.user_id}</div>
                 <div className='submit_time'>{timestamp}s</div>
                 {
                     data.answers.map((record, index) => (
@@ -192,10 +203,15 @@ const Host = () => {
 
         socket_io.on('user_join', (socket_data) => {
 
-            const {user_id} = socket_data
+            const {user_id, username} = socket_data
             setPlayerList(pastSet => {
                 const newSet = new Set(pastSet);
-                newSet.add(user_id);
+                if(username){
+                    newSet.add(username);
+                }
+                else{
+                    newSet.add(user_id);
+                }
                 return newSet;
             });
         });
@@ -225,7 +241,7 @@ const Host = () => {
     }, [privateCode, uuid, userID]);
 
     return (
-        <HostContext.Provider value={{ currentQuestion, playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
+        <HostContext.Provider value={{ navigate, currentQuestion, playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
             <div className="host_container">
                 {currentState}
             </div>
