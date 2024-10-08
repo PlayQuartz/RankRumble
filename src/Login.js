@@ -18,6 +18,7 @@ const Login = () => {
     const token = get_cookie('auth_token')
     const navigate = useNavigate()
 
+
     useEffect(() => {
 
         fetch('https://api.playquartz.com/request/token/', {
@@ -71,6 +72,18 @@ const Login = () => {
         })
 
     }
+
+    useEffect(() => {
+        const handleKeyUp = (event) => {
+            if (event.code === 'Enter') {
+                submit_login();
+            }
+        };
+        document.addEventListener('keyup', handleKeyUp);
+        return () => {
+            document.removeEventListener('keyup', handleKeyUp);
+        };
+    }, []);
 
     return (
         <div className='login'>

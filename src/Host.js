@@ -122,7 +122,7 @@ const LeaderboardRoom = ({ leaderboard }) => {
 
 const ReviewRoom = () => {
 
-    const { privateCode, currentQuestion,  socket, setCurrentState, nextState, playerAnswers } = useContext(HostContext);
+    const { privateCode, currentQuestion,  socket, setCurrentState, nextState, playerAnswers, setPlayerAnswers } = useContext(HostContext);
 
     const UserAnswer = ({ data }) => {
 
@@ -170,7 +170,9 @@ const ReviewRoom = () => {
             setCurrentState(<LeaderboardRoom />)
         }
         else{
+            setPlayerAnswers([])
             socket.emit('quizz_state', {state: 'question', current_question: nextState, private_code: privateCode})
+
         }
     }
 
@@ -274,7 +276,7 @@ const Host = () => {
     }, [privateCode, uuid, userID]);
 
     return (
-        <HostContext.Provider value={{ navigate, currentQuestion, playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
+        <HostContext.Provider value={{ navigate, setPlayerAnswers, currentQuestion, playerList, privateCode, socket, nextState, setCurrentState, playerAnswers }}>
             <div className="host_container">
                 {currentState}
             </div>
