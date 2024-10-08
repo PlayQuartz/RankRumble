@@ -1337,6 +1337,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 30px;
+
+    .username{
+        font-size: 25px;
+        font-weight: 600;
+    }
 
     .ranking{
         display: flex;

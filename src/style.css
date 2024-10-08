@@ -1140,6 +1140,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 30px;
+}
+.overlay .username {
+  font-size: 25px;
+  font-weight: 600;
 }
 .overlay .ranking {
   display: flex;

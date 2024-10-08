@@ -47,6 +47,7 @@ const Overlay = () => {
 
     const [privateCode, setPrivateCode] = useState(null)
     const [socket, setSocket] = useState(null);
+    const [username, setUsername] = useState(null)
     const [correction, setCorrection] = useState(null)
     const user_id = new URLSearchParams(useLocation().search).get('user_id');
 
@@ -77,6 +78,8 @@ const Overlay = () => {
 
         if(user_id){
             socket_io.on('overlay', (socket_data) => {
+                console.log(socket_data)
+                setUsername(socket_data.username)
                 setCorrection(socket_data.answer)
             })
         }
@@ -97,6 +100,7 @@ const Overlay = () => {
     return (
         <div className='overlay'>
 
+            {username && <div className='username'>{username}</div>}
             {correction && <Ranking data={correction} lock={user_id ? false : true}/>}
 
         </div>
