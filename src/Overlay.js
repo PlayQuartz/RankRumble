@@ -78,9 +78,12 @@ const Overlay = () => {
 
         if(user_id){
             socket_io.on('overlay', (socket_data) => {
-                console.log(socket_data)
-                setUsername(socket_data.username)
-                setCorrection(socket_data.answer)
+
+                if(socket_data.user_id === user_id){
+                    setUsername(socket_data.username)
+                    setCorrection(socket_data.answer)
+                }
+                
             })
         }
         else{
