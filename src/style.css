@@ -1144,8 +1144,15 @@ body {
   gap: 30px;
 }
 .overlay .username {
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 25px;
-  font-weight: 600;
+  font-weight: 700;
+  background-color: white;
+  color: black;
 }
 .overlay .ranking {
   display: flex;

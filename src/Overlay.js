@@ -100,7 +100,7 @@ const Overlay = () => {
     return (
         <div className='overlay'>
 
-            {username && <div className='username'>{username}</div>}
+            <div className='username'>{username ? `${username}'s Ranking` : 'Official Ranking'}</div>
             {correction && <Ranking data={correction} lock={user_id ? false : true}/>}
 
         </div>
