@@ -48,7 +48,6 @@ const Overlay = () => {
     const [privateCode, setPrivateCode] = useState(null)
     const [socket, setSocket] = useState(null);
     const [correction, setCorrection] = useState(null)
-    let data = ['Mongraal', 'MrSavage', 'Clix', 'Tayson', 'Queasy']
     const user_id = new URLSearchParams(useLocation().search).get('user_id');
 
 
@@ -98,11 +97,7 @@ const Overlay = () => {
     return (
         <div className='overlay'>
 
-            <div className='container' >
-
-                {correction && <Ranking data={correction} lock={user_id ? false : true}/>}
-
-            </div>
+            {correction && <Ranking data={correction} lock={user_id ? false : true}/>}
 
         </div>
     )

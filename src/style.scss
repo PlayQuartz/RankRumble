@@ -1334,40 +1334,27 @@ body {
     background-color: #000;
     color: white;
     font-family: 'Montserrat';
-
-    .container{
-        width: 1280px;
-        height: 360px;
-        background-color: lightblue ;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-    }
-
-    .animated-box {
-        background-color: lightblue;
-        margin: 20px auto;
-        transition: transform 1s ease-in-out; /* Transition controlled dynamically */
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .ranking{
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 10px;
 
         .entry{
             display: grid;
             position: relative;
-            grid-template-columns: 45px 200px;
-            height: 45px;
-            width: 245px;
+            grid-template-columns: 62px 262px;
+            height: 62px;
             background-color: #2E2E2E;
 
             .lock{
                 position: absolute;
-                height: 45px;
-                left: 45px;
-                width: 200px;
+                height: 62px;
+                left: 62px;
+                width: 262px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -1382,14 +1369,14 @@ body {
 
             .rank{
                 background-color: #7c00e9;
-                font-weight: 700;
+                font-weight: 800;
                 font-size: 25px;
             }
 
             .record{
                 background-color: white;
                 color: black;
-                font-weight: 500;
+                font-weight: 700;
                 font-size: 20px;
             }
 
